@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Spanish Learning App</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Translate the sentence:</h1>
+    <p id="sentence"></p>
+    <form id="translation-form">
+        <input type="hidden" id="selected_tense" name="tense" value="{{ request.args.get('tense', 'present') }}">
+        <input type="hidden" id="selected_tenses" name="tenses" value="{{ request.args.get('tenses') }}">
+        <label for="user_translation">Your translation:</label>
+        <input type="text" id="user_translation" name="user_translation">
+        <button type="submit">Check</button>
+    </form>
+    <label for="tenses">Select Tenses:</label>
+    <div id="tenses">
+        <!-- Checkbox options for tenses -->
+        <input type="checkbox" id="present" name="tenses" value="present">
+        <label for="present">Present</label><br>
+        <input type="checkbox" id="past" name="tenses" value="past">
+        <label for="past">Past</label><br>
+        <input type="checkbox" id="future" name="tenses" value="future">
+        <label for="future">Future</label><br>
+        <input type="checkbox" id="present_continuous" name="tenses" value="present_continuous">
+        <label for="present_continuous">Present Continuous</label><br>
+        <input type="checkbox" id="past_continuous" name="tenses" value="past_continuous">
+        <label for="past_continuous">Past Continuous</label><br>
+        <input type="checkbox" id="future_continuous" name="tenses" value="future_continuous">
+        <label for="future_continuous">Future Continuous</label><br>
+        <input type="checkbox" id="present_perfect" name="tenses" value="present_perfect">
+        <label for="present_perfect">Present Perfect</label><br>
+        <input type="checkbox" id="past_perfect" name="tenses" value="past_perfect">
+        <label for="past_perfect">Past Perfect</label><br>
+        <input type="checkbox" id="future_perfect" name="tenses" value="future_perfect">
+        <label for="future_perfect">Future Perfect</label><br>
+        <input type="checkbox" id="present_perfect_continuous" name="tenses" value="present_perfect_continuous">
+        <label for="present_perfect_continuous">Present Perfect Continuous</label><br>
+        <input type="checkbox" id="past_perfect_continuous" name="tenses" value="past_perfect_continuous">
+        <label for="past_perfect_continuous">Past Perfect Continuous</label><br>
+        <input type="checkbox" id="future_perfect_continuous" name="tenses" value="future_perfect_continuous">
+        <label for="future_perfect_continuous">Future Perfect Continuous</label><br>
+        <input type="checkbox" id="imperfect" name="tenses" value="imperfect">
+        <label for="imperfect">Imperfect</label><br>
+        <input type="checkbox" id="pluscuamperfecto" name="tenses" value="pluscuamperfecto">
+        <label for="pluscuamperfecto">Pluscuamperfecto</label><br>
+        <input type="checkbox" id="present_subjunctive" name="tenses" value="present_subjunctive">
+        <label for="present_subjunctive">Present Subjunctive</label><br>
+        <input type="checkbox" id="past_subjunctive" name="tenses" value="past_subjunctive">
+        <label for="past_subjunctive">Past Subjunctive</label><br>
+        <input type="checkbox" id="future_subjunctive" name="tenses" value="future_subjunctive">
+        <label for="future_subjunctive">Future Subjunctive</label><br>
+    </div>
+    <div id="result"></div>
+    <button id="generate-sentence">Generate Sentence</button>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Array to store selected tenses
+            var selectedTenses = [];
+
+            // Handle checkbox changes
+            $('input[name="tenses"]').on('change', function() {
+                var tense = $(this).val();
+
+                if ($(this).is(':checked')) {
+                    // Checkbox is checked, add the tense to the selectedTenses array
+                    selectedTenses.push(tense);
+                } else {
+                    // Checkbox is unchecked, remove the tense from the selectedTenses array
+                    var index = selectedTenses.indexOf(tense);
+                    if (index !== -1) {
+                        selectedTenses.splice(index, 1);
+                    }
+
+                    // Debugging statement to display selected tenses
+                    console.log("Selected Tenses: " + selectedTenses.join(', '));
+                }
+            });
+
+
+
+            // Handle the "Generate Sentence" button click
+            $('#generate-sentence').click(function() {
+                fetchNewSentence(selectedTenses);
+            });
+
+            // Handle the form submission
+            $('#translation-form').submit(function(event) {
+                event.preventDefault();
+
+                // Use the selectedTenses array for your AJAX request or form submission
+                console.log("Selected Tenses for Submission: " + selectedTenses.join(', '));
+            });
+
+            function fetchNewSentence(selectedTenses) {
+                // Randomly select one tense from the selected tenses
+
+                // Make an AJAX request to fetch a sentence based on the randomly selected tense
+                console.log(selectedTenses);
+                $.ajax({
+                    url: '/generate_sentence',
+                    type: 'POST',
+                    data: { 'tenses': selectedTenses},  // Send a single randomly selected tense
+                    success: function(response) {
+                        // Update the displayed sentence with the new one
+                        var sentence = response.sentence;
+                        $("#sentence").text(sentence);
+                    }
+                });
+            }
+
+        });
+    </script>
+</body>
+</html>
+

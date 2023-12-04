@@ -1,0 +1,30 @@
+/* style.css */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 0;
+}
+
+h1 {
+    color: #333;
+}
+
+#translation-form {
+    margin: 20px 0;
+}
+
+label {
+    font-weight: bold;
+}
+
+select, input, button {
+    margin: 5px;
+    padding: 10px;
+}
+
+#result {
+    font-weight: bold;
+    margin-top: 10px;
+    color: green;
+}
